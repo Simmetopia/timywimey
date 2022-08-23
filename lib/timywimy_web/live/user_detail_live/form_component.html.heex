@@ -1,0 +1,23 @@
+<div>
+  <h2><%= @title %></h2>
+
+  <.form
+    let={f}
+    for={@changeset}
+    id="user_detail-form"
+    phx-target={@myself}
+    phx-change="validate"
+    class="flex flex-col"
+    phx-submit="save"
+  >
+    <%= label(f, :name) %>
+    <%= text_input(f, :name, class: "input") %>
+    <%= error_tag(f, :name) %>
+
+    <%= label(f, :weekly_hours) %>
+    <%= number_input(f, :weekly_hours, class: "input") %>
+    <%= error_tag(f, :weekly_hours) %>
+
+    <%= submit("Save", phx_disable_with: "Saving...", class: "button mt-2 self-end") %>
+  </.form>
+</div>

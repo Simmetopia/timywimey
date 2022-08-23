@@ -1,0 +1,31 @@
+<h1>Show Timesheet</h1>
+
+<%= if @live_action in [:edit] do %>
+  <.modal return_to={Routes.timesheet_show_path(@socket, :show, @timesheet)}>
+    <.live_component
+      module={TimyWimeyWeb.TimesheetLive.FormComponent}
+      id={@timesheet.id}
+      title={@page_title}
+      action={@live_action}
+      timesheet={@timesheet}
+      return_to={Routes.timesheet_show_path(@socket, :show, @timesheet)}
+    />
+  </.modal>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Time usec:</strong>
+    <%= @timesheet.time_usec %>
+  </li>
+
+  <li>
+    <strong>Note:</strong>
+    <%= @timesheet.note %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.timesheet_show_path(@socket, :edit, @timesheet), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.timesheet_index_path(@socket, :index) %></span>

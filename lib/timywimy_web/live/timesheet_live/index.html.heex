@@ -1,0 +1,62 @@
+<div class="flex flex-col">
+  <h1>Listing Timesheets</h1>
+
+  <%= if @live_action in [:new, :edit] do %>
+    <.modal return_to={Routes.timesheet_index_path(@socket, :index)}>
+      <.live_component
+        module={TimyWimeyWeb.TimesheetLive.FormComponent}
+        id={@timesheet.id || :new}
+        title={@page_title}
+        action={@live_action}
+        timesheet={@timesheet}
+        return_to={Routes.timesheet_index_path(@socket, :index)}
+      />
+    </.modal>
+  <% end %>
+
+  <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="py-3 px-6">hours</th>
+        <th scope="col" class="py-3 px-6">minutes</th>
+        <th scope="col" class="py-3 px-6">Note</th>
+        <th scope="col" class="py-3 px-6"></th>
+      </tr>
+    </thead>
+    <tbody id="timesheets">
+      <%= for timesheet <- @timesheets do %>
+        <tr
+          class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+          id={"timesheet-#{timesheet.id}"}
+        >
+          <td class="py-3 px-6"><%= timesheet.hours %></td>
+          <td class="py-3 px-6"><%= timesheet.minutes %></td>
+          <td class="py-3 px-6"><%= timesheet.note %></td>
+
+          <td class="py-3 px-6 flex flex-row justify-between gap-3">
+            <span>
+              <%= live_patch("Edit",
+                to: Routes.timesheet_index_path(@socket, :edit, timesheet),
+                class: "underline text-white"
+              ) %>
+            </span>
+            <span>
+              <%= link("Delete",
+                to: "#",
+                phx_click: "delete",
+                phx_value_id: timesheet.id,
+                data: [confirm: "Are you sure?"],
+                class: "underline text-white"
+              ) %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= live_patch("New Timesheet",
+    to: Routes.timesheet_index_path(@socket, :new),
+    class: "button mt-3 self-end"
+  ) %>
+</div>
