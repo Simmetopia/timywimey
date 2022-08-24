@@ -21,6 +21,18 @@ defmodule TimyWimey.Timesheets do
     Repo.all(Timesheet)
   end
 
+  def time_sheets_week(user) do
+    date =
+      Date.utc_today()
+      |> Date.beginning_of_week()
+
+    date = NaiveDateTime.new!(date, ~T[00:00:00.000])
+
+    query = from(t in Timesheet, where: t.user_id == ^user.id, where: t.inserted_at > ^date)
+
+    Repo.all(query)
+  end
+
   @doc """
   Gets a single timesheet.
 
@@ -49,9 +61,10 @@ defmodule TimyWimey.Timesheets do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_timesheet(attrs \\ %{}) do
+  def create_timesheet(attrs \\ %{}, user) do
     %Timesheet{}
     |> Timesheet.changeset(attrs)
+    |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert()
   end
 

@@ -1,12 +1,14 @@
 <ul>
-<%= if @current_user do %>
-  <li><%= @current_user.email %></li>
-  <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-  <li><%= link "timesheets", to: Routes.timesheet_index_path(@conn, :index) %></li>
-  <li><%= link "User details", to: Routes.user_detail_index_path(@conn, :index) %></li>
-  <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-<% else %>
-  <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-  <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
-<% end %>
+  <%= if @current_user do %>
+    <li><%= @current_user.email %></li>
+    <li><%= link("Settings", to: Routes.user_settings_path(@conn, :edit)) %></li>
+    <li><%= live_redirect("timesheets", to: Routes.timesheet_index_path(@conn, :index)) %></li>
+    <li>
+      <%= live_redirect("User details", to: Routes.user_detail_index_path(@conn, :index)) %>
+    </li>
+    <li><%= link("Log out", to: Routes.user_session_path(@conn, :delete), method: :delete) %></li>
+  <% else %>
+    <li><%= link("Register", to: Routes.user_registration_path(@conn, :new)) %></li>
+    <li><%= link("Log in", to: Routes.user_session_path(@conn, :new)) %></li>
+  <% end %>
 </ul>

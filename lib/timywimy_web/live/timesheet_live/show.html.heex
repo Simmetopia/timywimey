@@ -9,12 +9,12 @@
       action={@live_action}
       timesheet={@timesheet}
       return_to={Routes.timesheet_show_path(@socket, :show, @timesheet)}
+      user={@user}
     />
   </.modal>
 <% end %>
 
 <ul>
-
   <li>
     <strong>Time usec:</strong>
     <%= @timesheet.time_usec %>
@@ -24,8 +24,12 @@
     <strong>Note:</strong>
     <%= @timesheet.note %>
   </li>
-
 </ul>
 
-<span><%= live_patch "Edit", to: Routes.timesheet_show_path(@socket, :edit, @timesheet), class: "button" %></span> |
-<span><%= live_redirect "Back", to: Routes.timesheet_index_path(@socket, :index) %></span>
+<span>
+  <%= live_patch("Edit",
+    to: Routes.timesheet_show_path(@socket, :edit, @timesheet),
+    class: "button"
+  ) %>
+</span> |
+<span><%= live_redirect("Back", to: Routes.timesheet_index_path(@socket, :index)) %></span>

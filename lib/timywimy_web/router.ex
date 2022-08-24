@@ -17,12 +17,6 @@ defmodule TimyWimeyWeb.Router do
     plug(:accepts, ["json"])
   end
 
-  scope "/", TimyWimeyWeb do
-    pipe_through(:browser)
-
-    get("/", PageController, :index)
-  end
-
   # Other scopes may use custom stacks.
   # scope "/api", TimyWimeyWeb do
   #   pipe_through :api
@@ -80,6 +74,8 @@ defmodule TimyWimeyWeb.Router do
     get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
 
     live_session :default, on_mount: {TimyWimey.MountHooks, :auth} do
+      live("/", IndexLive, :index)
+      live("/new", IndexLive, :new)
       live("/user_details", UserDetailLive.Index, :index)
 
       live "/timesheets", TimesheetLive.Index, :index
