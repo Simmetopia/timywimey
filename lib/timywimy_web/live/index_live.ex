@@ -71,10 +71,7 @@ defmodule TimyWimeyWeb.IndexLive do
   end
 
   def total_time(timesheets) do
-    {hours, minutes} =
-      Enum.reduce(timesheets, {0, 0}, fn timesheet, {hours, minutes} ->
-        {hours + timesheet.hours, minutes + timesheet.minutes}
-      end)
+    {hours, minutes} = reduce_timesheets(timesheets)
 
     {h, m, _, _} =
       Timex.Duration.from_hours(hours)
@@ -84,11 +81,18 @@ defmodule TimyWimeyWeb.IndexLive do
     "#{h}h:#{m}m"
   end
 
+  defp reduce_timesheets([]) do
+    {0, 0}
+  end
+
+  defp reduce_timesheets(timesheets) do
+    Enum.reduce(timesheets, {0, 0}, fn timesheet, {hours, minutes} ->
+      {hours + timesheet.hours, minutes + timesheet.minutes}
+    end)
+  end
+
   def missing_time(total_time, timesheets) do
-    {hours, minutes} =
-      Enum.reduce(timesheets, {0, 0}, fn timesheet, {hours, minutes} ->
-        {hours + timesheet.hours, minutes + timesheet.minutes}
-      end)
+    {hours, minutes} = reduce_timesheets(timesheets)
 
     {h, m, _, _} =
       Timex.Duration.from_hours(hours)
@@ -98,5 +102,9 @@ defmodule TimyWimeyWeb.IndexLive do
       |> Timex.Duration.to_clock()
 
     "#{h}h:#{m}m"
+  end
+
+  def missing_time(nil, _timesheets) do
+    "cannot calculate without total time"
   end
 end
