@@ -32,7 +32,8 @@ defmodule TimyWimeyWeb.UserDetailLive.FormComponent do
       {:ok, _user_detail} ->
         {:noreply,
          socket
-         |> put_flash(:info, "User detail updated successfully")}
+         |> put_flash(:info, "User detail updated successfully")
+         |> push_redirect(to: Routes.index_path(socket, :index))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}

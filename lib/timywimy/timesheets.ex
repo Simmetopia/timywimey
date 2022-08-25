@@ -21,9 +21,10 @@ defmodule TimyWimey.Timesheets do
     Repo.all(Timesheet)
   end
 
-  def time_sheets_week(user) do
+  def time_sheets_week(user, diff_weeks \\ 0) do
     date =
       Date.utc_today()
+      |> Date.add(diff_weeks * 7)
       |> Date.beginning_of_week()
 
     date = NaiveDateTime.new!(date, ~T[00:00:00.000])
