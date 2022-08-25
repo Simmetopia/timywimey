@@ -15,7 +15,7 @@
   <h2 class="text-2xl">Overview</h2>
   <div class="rounded bg-white p-3 shadow flex flex-col gap-3">
     <span class="text-lg self-center">
-      <%= "#{@date_today |> Date.beginning_of_week()} - #{@date_today |> Date.end_of_week()}" %>
+      <%= "#{@date_today |> Date.beginning_of_week() |> Calendar.strftime("%B %-d, %Y")} - #{@date_today |> Date.end_of_week() |> Calendar.strftime("%B %-d, %Y")}" %>
     </span>
     <span>
       You are working <%= @user.details.weekly_hours %> hours pr week
