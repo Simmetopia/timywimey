@@ -8,14 +8,9 @@ defmodule TimyWimey.UserDetailsFixtures do
   Generate a user_detail.
   """
   def user_detail_fixture(attrs \\ %{}) do
-    {:ok, user_detail} =
-      attrs
-      |> Enum.into(%{
-        name: "some name",
-        weekly_hours: 42
-      })
-      |> TimyWimey.UserDetails.create_user_detail()
+    user = TimyWimey.UsersFixtures.user_fixture()
+    {:ok, details} = TimyWimey.UserDetails.update_user_detail(user.details, attrs)
 
-    user_detail
+    details
   end
 end

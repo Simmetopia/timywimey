@@ -1,20 +1,25 @@
 defmodule TimyWimeyWeb.TimesheetLiveTest do
-  use TimyWimeyWeb.ConnCase
+  use TimyWimeyWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
   import TimyWimey.TimesheetsFixtures
 
-  @create_attrs %{note: "some note", time_usec: 42}
-  @update_attrs %{note: "some updated note", time_usec: 43}
-  @invalid_attrs %{note: nil, time_usec: nil}
+  @create_attrs %{note: "some note", minutes: 42}
+  @update_attrs %{note: "some updated note", minutes: 43}
+  @invalid_attrs %{note: nil, minutes: nil}
 
   defp create_timesheet(_) do
     timesheet = timesheet_fixture()
     %{timesheet: timesheet}
   end
 
+  defp login_user(%{timesheet: timesheet, conn: conn} = _) do
+    conn = log_in_user(conn, timesheet.user)
+    %{conn: conn}
+  end
+
   describe "Index" do
-    setup [:create_timesheet]
+    setup [:create_timesheet, :login_user]
 
     test "lists all timesheets", %{conn: conn, timesheet: timesheet} do
       {:ok, _index_live, html} = live(conn, Routes.timesheet_index_path(conn, :index))
@@ -76,7 +81,7 @@ defmodule TimyWimeyWeb.TimesheetLiveTest do
   end
 
   describe "Show" do
-    setup [:create_timesheet]
+    setup [:create_timesheet, :login_user]
 
     test "displays timesheet", %{conn: conn, timesheet: timesheet} do
       {:ok, _show_live, html} = live(conn, Routes.timesheet_show_path(conn, :show, timesheet))

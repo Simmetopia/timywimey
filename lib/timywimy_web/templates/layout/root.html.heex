@@ -23,10 +23,10 @@
             src={Routes.static_path(@conn, "/images/phoenix.png")}
             alt="Phoenix Framework Logo"
           />
-          <%= render("_user_menu.html", assigns) %>
         </a>
       </section>
     </header>
     <%= @inner_content %>
+    <%= render("_user_menu.html", assigns) %>
   </body>
 </html>

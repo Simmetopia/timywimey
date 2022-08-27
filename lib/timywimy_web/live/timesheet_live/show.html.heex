@@ -16,8 +16,8 @@
 
 <ul>
   <li>
-    <strong>Time usec:</strong>
-    <%= @timesheet.time_usec %>
+    <strong>Time minutes:</strong>
+    <%= @timesheet.minutes %>
   </li>
 
   <li>
@@ -31,5 +31,6 @@
     to: Routes.timesheet_show_path(@socket, :edit, @timesheet),
     class: "button"
   ) %>
-</span> |
+</span>
+|
 <span><%= live_redirect("Back", to: Routes.timesheet_index_path(@socket, :index)) %></span>

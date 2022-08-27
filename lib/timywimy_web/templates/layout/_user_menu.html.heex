@@ -1,13 +1,28 @@
-<ul>
-  <%= if @current_user do %>
-    <li><%= link("Settings", to: Routes.user_settings_path(@conn, :edit)) %></li>
-    <li><%= live_redirect("timesheets", to: Routes.timesheet_index_path(@conn, :index)) %></li>
-    <li>
-      <%= live_redirect("User details", to: Routes.user_detail_index_path(@conn, :index)) %>
-    </li>
-    <li><%= link("Log out", to: Routes.user_session_path(@conn, :delete), method: :delete) %></li>
-  <% else %>
-    <li><%= link("Register", to: Routes.user_registration_path(@conn, :new)) %></li>
-    <li><%= link("Log in", to: Routes.user_session_path(@conn, :new)) %></li>
-  <% end %>
-</ul>
+<%= if @current_user do %>
+  <div class="w-screen place-items-center bottom-0 right-0 h-12 absolute grid grid-cols-5 border-t">
+    <%= live_redirect( to: Routes.index_path(@conn, :index)) do %>
+      <TimyWimeyWeb.Icons.home />
+    <% end %>
+
+    <%= live_redirect(to: Routes.timesheet_index_path(@conn, :index)) do %>
+      <TimyWimeyWeb.Icons.timeheets />
+    <% end %>
+
+    <%= live_redirect(to: Routes.user_detail_index_path(@conn, :index)) do %>
+      <TimyWimeyWeb.Icons.user />
+    <% end %>
+
+    <%= live_redirect( to: Routes.user_settings_path(@conn, :edit)) do %>
+      <TimyWimeyWeb.Icons.settings />
+    <% end %>
+
+    <%= link(to: Routes.user_session_path(@conn, :delete), method: :delete) do %>
+      <TimyWimeyWeb.Icons.logout />
+    <% end %>
+  </div>
+<% else %>
+  <div class="w-screen bottom-0 right-0 h-12 absolute grid grid-cols-2 place-items-center border-t">
+    <%= link("Register", to: Routes.user_registration_path(@conn, :new)) %>
+    <%= link("Log in", to: Routes.user_session_path(@conn, :new)) %>
+  </div>
+<% end %>

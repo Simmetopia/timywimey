@@ -17,8 +17,9 @@ defmodule TimyWimey.Timesheets do
       [%Timesheet{}, ...]
 
   """
-  def list_timesheets do
-    Repo.all(Timesheet)
+  def list_timesheets(user) do
+    from(p in Timesheet, where: p.user_id == ^user.id)
+    |> Repo.all()
   end
 
   def time_sheets_week(user, diff_weeks \\ 0) do
@@ -32,6 +33,60 @@ defmodule TimyWimey.Timesheets do
     query = from(t in Timesheet, where: t.user_id == ^user.id, where: t.inserted_at > ^date)
 
     Repo.all(query)
+  end
+
+  def spare_time(user) do
+    query =
+      from(t in Timesheet,
+        as: :timesheet,
+        where: t.user_id == ^user.id,
+        select: %{total_hours: sum(t.hours), total_minuts: sum(t.minutes)}
+      )
+
+    q1 =
+      from([timesheet: t] in query,
+        where: t.is_spare_time == false
+      )
+
+    q2 =
+      from([timesheet: t] in query,
+        where: t.is_spare_time == true
+      )
+
+    [%{total_hours: th_plus, total_minuts: tm_plus}] = Repo.all(q1)
+    [%{total_hours: th, total_minuts: tm}] = Repo.all(q2)
+
+    {h_p, m_p, _, _} = add_hours_and_minutes(th_plus, tm_plus)
+
+    {h, m, _, _} = add_hours_and_minutes(th, tm)
+
+    [first_timesheet_date] =
+      from(t in Timesheet,
+        as: :timesheet,
+        where: t.user_id == ^user.id,
+        order_by: [asc: :inserted_at],
+        limit: 1,
+        select: t.inserted_at
+      )
+      |> Repo.all()
+
+    %{timesheets_time: {h_p, m_p}, spare_time: {h, m}, first_timesheet: first_timesheet_date}
+  end
+
+  defp add_hours_and_minutes(nil, nil) do
+    Timex.Duration.from_minutes(0) |> Timex.Duration.to_clock()
+  end
+
+  defp add_hours_and_minutes(nil, m) do
+    Timex.Duration.from_minutes(m) |> Timex.Duration.to_clock()
+  end
+
+  defp add_hours_and_minutes(h, nil), do: h
+
+  defp add_hours_and_minutes(h, m) do
+    Timex.Duration.from_hours(h)
+    |> Timex.Duration.add(Timex.Duration.from_minutes(m))
+    |> Timex.Duration.to_clock()
   end
 
   @doc """
@@ -48,7 +103,7 @@ defmodule TimyWimey.Timesheets do
       ** (Ecto.NoResultsError)
 
   """
-  def get_timesheet!(id), do: Repo.get!(Timesheet, id)
+  def get_timesheet!(id), do: Repo.get!(Timesheet, id) |> Repo.preload(:user)
 
   @doc """
   Creates a timesheet.

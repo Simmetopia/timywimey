@@ -1,5 +1,5 @@
 defmodule TimyWimey.UsersTest do
-  use TimyWimey.DataCase
+  use TimyWimey.DataCase, async: true
 
   alias TimyWimey.Users
 

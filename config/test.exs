@@ -10,7 +10,7 @@ config :bcrypt_elixir, :log_rounds, 1
 # Run `mix help test` for more information.
 config :timywimy, TimyWimey.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "changeme",
   hostname: "localhost",
   database: "timywimy_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
@@ -27,7 +27,7 @@ config :timywimy, TimyWimeyWeb.Endpoint,
 config :timywimy, TimyWimey.Mailer, adapter: Swoosh.Adapters.Test
 
 # Print only warnings and errors during test
-config :logger, level: :warn
+config :logger, level: :warning
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

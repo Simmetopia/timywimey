@@ -22,10 +22,16 @@
         <%= number_input(f, :minutes, class: "input") %>
         <%= error_tag(f, :minutes) %>
       </div>
+
+      <div class="flex items-center flex-row gap-3 lg:flex-col w-full">
+        <%= label(f, :is_spare_time, "Spare time?") %>
+        <%= checkbox(f, :is_spare_time, class: "input") %>
+        <%= error_tag(f, :is_spare_time) %>
+      </div>
     </div>
 
     <%= label(f, :note) %>
-    <%= textarea(f, :note, class: "input") %>
+    <%= textarea(f, :note, class: "input", phx_debounce: 500) %>
     <%= error_tag(f, :note) %>
 
     <%= submit("Save", phx_disable_with: "Saving...", class: "button self-end") %>

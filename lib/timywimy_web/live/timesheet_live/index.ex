@@ -5,8 +5,8 @@ defmodule TimyWimeyWeb.TimesheetLive.Index do
   alias TimyWimey.Timesheets.Timesheet
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :timesheets, list_timesheets())}
+  def mount(_params, _session, %{assigns: %{user: user}} = socket) do
+    {:ok, assign(socket, :timesheets, list_timesheets(user))}
   end
 
   @impl true
@@ -33,14 +33,14 @@ defmodule TimyWimeyWeb.TimesheetLive.Index do
   end
 
   @impl true
-  def handle_event("delete", %{"id" => id}, socket) do
+  def handle_event("delete", %{"id" => id}, %{assigns: %{user: user}} = socket) do
     timesheet = Timesheets.get_timesheet!(id)
     {:ok, _} = Timesheets.delete_timesheet(timesheet)
 
-    {:noreply, assign(socket, :timesheets, list_timesheets())}
+    {:noreply, assign(socket, :timesheets, list_timesheets(user))}
   end
 
-  defp list_timesheets do
-    Timesheets.list_timesheets()
+  defp list_timesheets(user) do
+    Timesheets.list_timesheets(user)
   end
 end

@@ -83,8 +83,8 @@ defmodule TimyWimey.Users do
   end
 
   def add_details({:ok, user}) do
-    UserDetails.create_user_detail(%{}, user)
-    {:ok, user}
+    {:ok, details} = UserDetails.create_user_detail(%{}, user)
+    {:ok, Map.put(user, :details, details)}
   end
 
   def add_details(e), do: e
