@@ -2,7 +2,7 @@ defmodule TimyWimey.TimesheetsTest do
   use TimyWimey.DataCase, async: true
 
   alias TimyWimey.Timesheets
-  alias TimyWimey.UsersFixtures
+  alias TimyWimey.WeeklyDigestFixtures
 
   describe "timesheets" do
     alias TimyWimey.Timesheets.Timesheet
@@ -13,7 +13,7 @@ defmodule TimyWimey.TimesheetsTest do
 
     test "list_timesheets/0 returns all timesheets" do
       timesheet = timesheet_fixture()
-      [sheet] = timesheets = Timesheets.list_timesheets(timesheet.user)
+      [sheet] = timesheets = Timesheets.list_timesheets(timesheet.week.user)
       assert Enum.count(timesheets) == 1
       assert sheet.id == timesheet.id
     end
@@ -26,16 +26,16 @@ defmodule TimyWimey.TimesheetsTest do
 
     test "create_timesheet/1 with valid data creates a timesheet" do
       valid_attrs = %{note: "some note", minutes: 42}
-      user = UsersFixtures.user_fixture()
+      week = WeeklyDigestFixtures.week_fixture()
 
-      {:ok, %Timesheet{} = timesheet} = Timesheets.create_timesheet(valid_attrs, user)
+      {:ok, %Timesheet{} = timesheet} = Timesheets.create_timesheet(valid_attrs, week)
       assert timesheet.note == "some note"
       assert timesheet.minutes == 42
     end
 
     test "create_timesheet/1 with invalid data returns error changeset" do
-      user = UsersFixtures.user_fixture()
-      assert {:error, %Ecto.Changeset{}} = Timesheets.create_timesheet(@invalid_attrs, user)
+      week = WeeklyDigestFixtures.week_fixture()
+      assert {:error, %Ecto.Changeset{}} = Timesheets.create_timesheet(@invalid_attrs, week)
     end
 
     test "update_timesheet/2 with valid data updates the timesheet" do
@@ -69,9 +69,9 @@ defmodule TimyWimey.TimesheetsTest do
     test "spare_time/1 returns a total report" do
       timesheet = timesheet_fixture(%{minutes: 30, hours: 10})
 
-      timesheet_fixture_user(timesheet.user, %{minutes: 30, hours: 10})
+      timesheet_fixture_week(timesheet.week, %{minutes: 30, hours: 10})
 
-      assert Timesheets.spare_time(timesheet.user) == %{
+      assert Timesheets.spare_time(timesheet.week.user) == %{
                first_timesheet: timesheet.inserted_at,
                spare_time: {0, 0},
                timesheets_time: {21, 0}
@@ -81,9 +81,9 @@ defmodule TimyWimey.TimesheetsTest do
     test "spare_time/1 returns a total report with correct spare time" do
       timesheet = timesheet_fixture(%{minutes: 30, hours: 10})
 
-      timesheet_fixture_user(timesheet.user, %{minutes: 30, hours: 10, is_spare_time: true})
+      timesheet_fixture_week(timesheet.week, %{minutes: 30, hours: 10, is_spare_time: true})
 
-      assert Timesheets.spare_time(timesheet.user) == %{
+      assert Timesheets.spare_time(timesheet.week.user) == %{
                first_timesheet: timesheet.inserted_at,
                spare_time: {10, 30},
                timesheets_time: {10, 30}
@@ -92,10 +92,11 @@ defmodule TimyWimey.TimesheetsTest do
 
     test "spare_time/1 returns a total report with no worked hours" do
       timesheet = timesheet_fixture(%{minutes: 0, hours: 0})
+      
 
-      timesheet_fixture_user(timesheet.user, %{minutes: 30, hours: 10, is_spare_time: true})
+      timesheet_fixture_week(timesheet.week, %{minutes: 30, hours: 10, is_spare_time: true})
 
-      assert Timesheets.spare_time(timesheet.user) == %{
+      assert Timesheets.spare_time(timesheet.week.user) == %{
                first_timesheet: timesheet.inserted_at,
                spare_time: {10, 30},
                timesheets_time: {0, 0}

@@ -7,7 +7,7 @@ defmodule TimyWimey.Timesheets.Timesheet do
     field :hours, :integer, default: 0
     field :minutes, :integer, default: 0
     field :is_spare_time, :boolean, default: false
-    belongs_to :user, TimyWimey.Users.User
+    belongs_to :week, TimyWimey.WeeklyDigest.Week
 
     timestamps()
   end

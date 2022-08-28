@@ -56,7 +56,7 @@ defmodule TimyWimey.UserDetails do
     %UserDetail{}
     |> UserDetail.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:user, user)
-    |> Repo.insert() 
+    |> Repo.insert()
   end
 
   @doc """
@@ -72,9 +72,29 @@ defmodule TimyWimey.UserDetails do
 
   """
   def update_user_detail(%UserDetail{} = user_detail, attrs) do
-    user_detail
-    |> UserDetail.changeset(attrs)
-    |> Repo.update()
+    user_update =
+      user_detail
+      |> UserDetail.changeset(attrs)
+      |> Repo.update()
+
+    case user_update do
+      {:ok, details} ->
+        week = Timex.now() |> Timex.week_of_month()
+
+        from(t in TimyWimey.WeeklyDigest.Week,
+          update: [set: [weekly_hours: ^details.weekly_hours]],
+          join: u in assoc(t, :user),
+          join: ud in assoc(u, :details),
+          where: ud.id == ^details.id,
+          where: t.week_nr == ^week
+        )
+        |> Repo.update_all([])
+
+        {:ok, details}
+
+      e ->
+        e
+    end
   end
 
   @doc """

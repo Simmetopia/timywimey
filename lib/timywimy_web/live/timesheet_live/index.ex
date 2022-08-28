@@ -2,16 +2,38 @@ defmodule TimyWimeyWeb.TimesheetLive.Index do
   use TimyWimeyWeb, :live_view
 
   alias TimyWimey.Timesheets
+  alias TimyWimey.WeeklyDigest
   alias TimyWimey.Timesheets.Timesheet
 
   @impl true
   def mount(_params, _session, %{assigns: %{user: user}} = socket) do
-    {:ok, assign(socket, :timesheets, list_timesheets(user))}
+    {:ok, assign(socket, :timesheets, list_timesheets(user)) |> assign_week()}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  def assign_week(%{assigns: %{user: user}} = socket) do
+    socket
+    |> assign_new(:weekly_digest, fn ->
+      week = Timex.now() |> Timex.week_of_month()
+
+      case WeeklyDigest.get_week_by_week(week, user) do
+        nil ->
+          {:ok, week} =
+            WeeklyDigest.create_week(
+              %{week_nr: week, weekly_hours: user.details.weekly_hours},
+              user
+            )
+
+          week
+
+        week ->
+          week
+      end
+    end)
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do

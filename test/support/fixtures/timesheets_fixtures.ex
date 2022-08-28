@@ -8,7 +8,7 @@ defmodule TimyWimey.TimesheetsFixtures do
   Generate a timesheet.
   """
   def timesheet_fixture(attrs \\ %{}) do
-    user = TimyWimey.UsersFixtures.user_fixture()
+    week = TimyWimey.WeeklyDigestFixtures.week_fixture()
 
     {:ok, timesheet} =
       attrs
@@ -16,19 +16,19 @@ defmodule TimyWimey.TimesheetsFixtures do
         note: "some note",
         minutes: 42
       })
-      |> TimyWimey.Timesheets.create_timesheet(user)
+      |> TimyWimey.Timesheets.create_timesheet(week)
 
     timesheet
   end
 
-  def timesheet_fixture_user(%TimyWimey.Users.User{} = user, attrs \\ %{}) do
+  def timesheet_fixture_week(%TimyWimey.WeeklyDigest.Week{} = week, attrs \\ %{}) do
     {:ok, timesheet} =
       attrs
       |> Enum.into(%{
         note: "some note",
         minutes: 42
       })
-      |> TimyWimey.Timesheets.create_timesheet(user)
+      |> TimyWimey.Timesheets.create_timesheet(week)
 
     timesheet
   end

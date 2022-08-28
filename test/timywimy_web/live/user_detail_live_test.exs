@@ -4,6 +4,7 @@ defmodule TimyWimeyWeb.UserDetailLiveTest do
   import Phoenix.LiveViewTest
   import TimyWimey.UserDetailsFixtures
 
+  @create_attrs %{name: "some name", weekly_hours: 42}
   @update_attrs %{name: "some updated name", weekly_hours: 43}
 
   defp create_user_detail(_) do

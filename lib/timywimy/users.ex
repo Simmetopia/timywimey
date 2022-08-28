@@ -59,7 +59,7 @@ defmodule TimyWimey.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id), do: Repo.get!(User, id) |> Repo.preload(:details)
 
   ## User registration
 
@@ -83,7 +83,7 @@ defmodule TimyWimey.Users do
   end
 
   def add_details({:ok, user}) do
-    {:ok, details} = UserDetails.create_user_detail(%{}, user)
+    {:ok, details} = UserDetails.create_user_detail(%{weekly_hours: 0}, user)
     {:ok, Map.put(user, :details, details)}
   end
 

@@ -18,11 +18,20 @@ defmodule TimyWimey.Timesheets do
 
   """
   def list_timesheets(user) do
-    from(p in Timesheet, where: p.user_id == ^user.id)
+    timesheet_by_user_query(user)
     |> Repo.all()
   end
 
-  def time_sheets_week(user, diff_weeks \\ 0) do
+  defp timesheet_by_user_query(user) do
+    from(p in Timesheet,
+      as: :timesheet,
+      join: w in assoc(p, :week),
+      join: u in assoc(w, :user),
+      where: u.id == ^user.id
+    )
+  end
+
+  def time_sheets_week(week, diff_weeks \\ 0) do
     date =
       Date.utc_today()
       |> Date.add(diff_weeks * 7)
@@ -30,16 +39,16 @@ defmodule TimyWimey.Timesheets do
 
     date = NaiveDateTime.new!(date, ~T[00:00:00.000])
 
-    query = from(t in Timesheet, where: t.user_id == ^user.id, where: t.inserted_at > ^date)
+    query = from(t in Timesheet, where: t.week_id == ^week.id, where: t.inserted_at > ^date)
 
     Repo.all(query)
   end
 
-  def spare_time(user) do
+  def spare_time(%TimyWimey.Users.User{} = user) do
+    timesheets_query = timesheet_by_user_query(user)
+
     query =
-      from(t in Timesheet,
-        as: :timesheet,
-        where: t.user_id == ^user.id,
+      from([timesheet: t] in timesheets_query,
         select: %{total_hours: sum(t.hours), total_minuts: sum(t.minutes)}
       )
 
@@ -61,9 +70,7 @@ defmodule TimyWimey.Timesheets do
     {h, m, _, _} = add_hours_and_minutes(th, tm)
 
     [first_timesheet_date] =
-      from(t in Timesheet,
-        as: :timesheet,
-        where: t.user_id == ^user.id,
+      from([timesheet: t] in timesheets_query,
         order_by: [asc: :inserted_at],
         limit: 1,
         select: t.inserted_at
@@ -103,7 +110,7 @@ defmodule TimyWimey.Timesheets do
       ** (Ecto.NoResultsError)
 
   """
-  def get_timesheet!(id), do: Repo.get!(Timesheet, id) |> Repo.preload(:user)
+  def get_timesheet!(id), do: Repo.get!(Timesheet, id) |> Repo.preload(:week)
 
   @doc """
   Creates a timesheet.
@@ -117,10 +124,10 @@ defmodule TimyWimey.Timesheets do
       {:error, %Ecto.Changeset{}}
 
   """
-  def create_timesheet(attrs \\ %{}, user) do
+  def create_timesheet(attrs \\ %{}, week) do
     %Timesheet{}
     |> Timesheet.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Ecto.Changeset.put_assoc(:week, week)
     |> Repo.insert()
   end
 

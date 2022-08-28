@@ -14,7 +14,7 @@ defmodule TimyWimeyWeb.TimesheetLiveTest do
   end
 
   defp login_user(%{timesheet: timesheet, conn: conn} = _) do
-    conn = log_in_user(conn, timesheet.user)
+    conn = log_in_user(conn, timesheet.week.user)
     %{conn: conn}
   end
 

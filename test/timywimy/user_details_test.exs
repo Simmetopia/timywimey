@@ -41,5 +41,21 @@ defmodule TimyWimey.UserDetailsTest do
       user_detail = user_detail_fixture()
       assert %Ecto.Changeset{} = UserDetails.change_user_detail(user_detail)
     end
+
+    test "change_user_detail/1 returns a user_detail changeset and updates current weeks time" do
+      user_detail = user_detail_fixture()
+      user = TimyWimey.Users.get_user!(user_detail.user.id)
+      week = TimyWimey.WeeklyDigestFixtures.week_fixture_user(user)
+
+      update_attrs = %{weekly_hours: 5}
+
+      assert {:ok, %UserDetail{} = user_detail} =
+               UserDetails.update_user_detail(user_detail, update_attrs)
+
+      week = TimyWimey.WeeklyDigest.get_week!(week.id)
+
+      assert user_detail.weekly_hours == week.weekly_hours
+
+    end
   end
 end

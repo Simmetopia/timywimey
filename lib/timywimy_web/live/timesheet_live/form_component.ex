@@ -41,7 +41,7 @@ defmodule TimyWimeyWeb.TimesheetLive.FormComponent do
   end
 
   defp save_timesheet(socket, :new, timesheet_params) do
-    case Timesheets.create_timesheet(timesheet_params, socket.assigns.user) do
+    case Timesheets.create_timesheet(timesheet_params, socket.assigns.week) do
       {:ok, _timesheet} ->
         {:noreply,
          socket
