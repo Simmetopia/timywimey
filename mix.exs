@@ -10,7 +10,17 @@ defmodule TimyWimey.MixProject do
       compilers: [] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      releases: releases()
+    ]
+  end
+
+  defp releases do
+    [
+      timywimy: [
+        include_executables_for: [:unix],
+        cookie: "eM7mDz1EottNqPWbRfvaLNpyb6W1Awb7Fkf64R6LUgtQDkJUZDg5JQ=="
+      ]
     ]
   end
 
