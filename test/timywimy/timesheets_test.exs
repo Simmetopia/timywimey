@@ -3,6 +3,7 @@ defmodule TimyWimey.TimesheetsTest do
 
   alias TimyWimey.Timesheets
   alias TimyWimey.WeeklyDigestFixtures
+  alias TimyWimey.WeeklyDigest
 
   describe "timesheets" do
     alias TimyWimey.Timesheets.Timesheet
@@ -92,7 +93,6 @@ defmodule TimyWimey.TimesheetsTest do
 
     test "spare_time/1 returns a total report with no worked hours" do
       timesheet = timesheet_fixture(%{minutes: 0, hours: 0})
-      
 
       timesheet_fixture_week(timesheet.week, %{minutes: 30, hours: 10, is_spare_time: true})
 
@@ -101,6 +101,60 @@ defmodule TimyWimey.TimesheetsTest do
                spare_time: {10, 30},
                timesheets_time: {0, 0}
              }
+    end
+
+    test "create_timesheet/1 updates week" do
+      valid_attrs = %{note: "some note", minutes: 42}
+      week = WeeklyDigestFixtures.week_fixture()
+
+      {:ok, %Timesheet{} = timesheet} = Timesheets.create_timesheet(valid_attrs, week)
+      assert timesheet.note == "some note"
+      assert timesheet.minutes == 42
+      week = WeeklyDigest.get_week!(week.id)
+
+      assert week.worked_time_minutes == 42
+    end
+
+    test "create_timesheet/1 updates week, with to timesheets" do
+      valid_attrs = %{note: "some note", minutes: 30}
+      week = WeeklyDigestFixtures.week_fixture()
+
+      Timesheets.create_timesheet(valid_attrs, week)
+      Timesheets.create_timesheet(valid_attrs, week)
+
+      week = WeeklyDigest.get_week!(week.id)
+
+      assert week.worked_time_minutes == 60
+    end
+
+    test "create_timesheet/1 updates week, with two timesheets where 1 is spare time" do
+      valid_attrs = %{note: "some note", minutes: 30}
+      week = WeeklyDigestFixtures.week_fixture()
+
+      Timesheets.create_timesheet(valid_attrs, week)
+      Timesheets.create_timesheet(%{note: "test", minutes: 30, is_spare_time: true}, week)
+
+      week = WeeklyDigest.get_week!(week.id)
+
+      assert week.worked_time_minutes == 30
+      assert week.spare_time_minutes == 30
+    end
+
+    test "update_timesheet/1 updates week, with two timesheets where 1 is spare time" do
+      valid_attrs = %{note: "some note", minutes: 30}
+      week = WeeklyDigestFixtures.week_fixture()
+
+      {:ok, timesheet} = Timesheets.create_timesheet(valid_attrs, week)
+      Timesheets.create_timesheet(%{note: "test", minutes: 30, is_spare_time: true}, week)
+
+      update_attrs = %{note: "some updated note", minutes: 45}
+
+      Timesheets.update_timesheet(timesheet, update_attrs)
+
+      week = WeeklyDigest.get_week!(week.id)
+
+      assert week.worked_time_minutes == 45
+      assert week.spare_time_minutes == 30
     end
   end
 end

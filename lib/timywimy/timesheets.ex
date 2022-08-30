@@ -7,6 +7,7 @@ defmodule TimyWimey.Timesheets do
   alias TimyWimey.Repo
 
   alias TimyWimey.Timesheets.Timesheet
+  alias TimyWimey.WeeklyDigest.Week
 
   @doc """
   Returns the list of timesheets.
@@ -125,10 +126,40 @@ defmodule TimyWimey.Timesheets do
 
   """
   def create_timesheet(attrs \\ %{}, week) do
-    %Timesheet{}
-    |> Timesheet.changeset(attrs)
-    |> Ecto.Changeset.put_assoc(:week, week)
-    |> Repo.insert()
+    res =
+      %Timesheet{}
+      |> Timesheet.changeset(attrs)
+      |> Ecto.Changeset.put_assoc(:week, week)
+      |> Repo.insert()
+
+    case res do
+      {:ok, timesheet} ->
+        minutes_worked =
+          Timex.Duration.from_hours(timesheet.hours)
+          |> Timex.Duration.add(Timex.Duration.from_minutes(timesheet.minutes))
+          |> Timex.Duration.to_minutes(truncate: true)
+
+        case timesheet.is_spare_time do
+          false ->
+            from(t in Week,
+              where: t.id == ^week.id,
+              update: [inc: [worked_time_minutes: ^minutes_worked]]
+            )
+            |> Repo.update_all([])
+
+          true ->
+            from(t in Week,
+              where: t.id == ^week.id,
+              update: [inc: [spare_time_minutes: ^minutes_worked]]
+            )
+            |> Repo.update_all([])
+        end
+
+        {:ok, timesheet}
+
+      default ->
+        default
+    end
   end
 
   @doc """
@@ -144,9 +175,41 @@ defmodule TimyWimey.Timesheets do
 
   """
   def update_timesheet(%Timesheet{} = timesheet, attrs) do
-    timesheet
-    |> Timesheet.changeset(attrs)
-    |> Repo.update()
+    res =
+      timesheet
+      |> Timesheet.changeset(attrs)
+      |> Repo.update()
+
+    case res do
+      {:ok, timesheet_n} ->
+        minutes_worked =
+          Timex.Duration.from_hours(timesheet_n.hours)
+          |> Timex.Duration.add(Timex.Duration.from_minutes(timesheet_n.minutes))
+          |> Timex.Duration.sub(Timex.Duration.from_hours(timesheet.hours))
+          |> Timex.Duration.sub(Timex.Duration.from_minutes(timesheet.minutes))
+          |> Timex.Duration.to_minutes(truncate: true)
+
+        case timesheet.is_spare_time do
+          false ->
+            from(t in Week,
+              where: t.id == ^timesheet.week_id,
+              update: [inc: [worked_time_minutes: ^minutes_worked]]
+            )
+            |> Repo.update_all([])
+
+          true ->
+            from(t in Week,
+              where: t.id == ^timesheet.week_id,
+              update: [inc: [spare_time_minutes: ^minutes_worked]]
+            )
+            |> Repo.update_all([])
+        end
+
+        {:ok, timesheet_n}
+
+      default ->
+        default
+    end
   end
 
   @doc """

@@ -2,7 +2,6 @@ defmodule TimyWimeyWeb.IndexLiveTest do
   use TimyWimeyWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
-  import TimyWimey.UserDetailsFixtures
   alias TimyWimey.TimesheetsFixtures
   alias TimyWimey.WeeklyDigestFixtures
 
@@ -11,7 +10,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     TimyWimey.UserDetails.update_user_detail(user.details, %{weekly_hours: 32})
     conn = log_in_user(conn, user)
     week =  WeeklyDigestFixtures.week_fixture_user(user)
-    timesheet = TimesheetsFixtures.timesheet_fixture_week(week, %{minutes: 30})
+    TimesheetsFixtures.timesheet_fixture_week(week, %{minutes: 30})
 
     %{conn: conn, user: user}
   end
@@ -38,7 +37,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     end
 
     test "can add new timesheet", %{conn: conn} do
-      {:ok, index_live, html} = live(conn, Routes.index_path(conn, :new))
+      {:ok, index_live, _html} = live(conn, Routes.index_path(conn, :new))
 
       {:ok, _, html} =
         index_live
@@ -50,7 +49,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     end
 
     test "can add new timesheet spare time", %{conn: conn} do
-      {:ok, index_live, html} = live(conn, Routes.index_path(conn, :new))
+      {:ok, index_live, _html} = live(conn, Routes.index_path(conn, :new))
 
       {:ok, _, html} =
         index_live
@@ -66,7 +65,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     setup [:auth_socket_no_week]
 
     test "can add new timesheet", %{conn: conn} do
-      {:ok, index_live, html} = live(conn, Routes.index_path(conn, :new))
+      {:ok, index_live, _html} = live(conn, Routes.index_path(conn, :new))
 
       {:ok, _, html} =
         index_live
@@ -78,7 +77,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     end
 
     test "new week, missing all hours", %{conn: conn} do
-      {:ok, index_live, html} = live(conn, Routes.index_path(conn, :new))
+      {:ok, _index_live, html} = live(conn, Routes.index_path(conn, :new))
 
       assert html =~ "0h:0m"
     end

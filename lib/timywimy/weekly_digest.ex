@@ -42,7 +42,8 @@ defmodule TimyWimey.WeeklyDigest do
   end
 
   def calculate_overtime(%TimyWimey.Users.User{} = user) do
-    weeks = from(t in Week, where: t.user_id == ^user.id) |> Repo.all()
+    weeks =
+      from(t in Week, where: t.user_id == ^user.id, order_by: [asc: :inserted_at]) |> Repo.all()
 
     weeks
     |> Enum.reduce(0, fn week, ot ->
@@ -51,10 +52,13 @@ defmodule TimyWimey.WeeklyDigest do
         spare_time_minutes: spare_time_minutes,
         worked_time_minutes: worked_time_minutes
       } = week
+
       weekly_minutes = weekly_hours * 60
 
       d_ot = spare_time_minutes + worked_time_minutes - weekly_minutes
-      ot + (d_ot - spare_time_minutes)
+      final_ot = ot + (d_ot - spare_time_minutes)
+
+      final_ot
     end)
   end
 

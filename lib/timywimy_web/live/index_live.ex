@@ -10,12 +10,20 @@ defmodule TimyWimeyWeb.IndexLive do
      socket
      |> assign(diff_weeks: 0, date_today: Date.utc_today())
      |> assign_week()
+     |> assign_overtime()
      |> assign_timesheets()}
   end
 
   @impl true
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  def assign_overtime(%{assigns: %{user: user}} = socket) do
+    socket
+    |> assign_new(:overtime, fn ->
+      WeeklyDigest.calculate_overtime(user)
+    end)
   end
 
   def assign_week(%{assigns: %{user: user}} = socket) do
@@ -30,6 +38,7 @@ defmodule TimyWimeyWeb.IndexLive do
               %{week_nr: week, weekly_hours: user.details.weekly_hours},
               user
             )
+
           week
 
         week ->

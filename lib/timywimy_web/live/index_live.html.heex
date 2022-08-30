@@ -28,6 +28,10 @@
       missing: <%= missing_time(@user.details.weekly_hours, @timesheets) %>
     </span>
 
+    <span>
+      saved overtime: <%= @overtime %>
+    </span>
+
     <div class="flex flex-row justify-between mt-4">
       <button class="underline text-bold text-blue-700">prev week</button>
       <button class="underline text-bold text-blue-700">next week</button>
