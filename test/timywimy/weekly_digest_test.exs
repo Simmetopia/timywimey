@@ -81,5 +81,13 @@ defmodule TimyWimey.WeeklyDigestTest do
       week = week_fixture()
       assert %Ecto.Changeset{} = WeeklyDigest.change_week(week)
     end
+
+    test "calculate_overtime/1 return 1 hour when 1 overtime hours" do
+      week = week_fixture(%{weekly_hours: 1})
+      timesheet = TimyWimey.TimesheetsFixtures.timesheet_fixture_week(week, %{hours: 2}) 
+
+      ot = WeeklyDigest.calculate_overtime(week.user)
+      assert ot == 60
+    end
   end
 end
