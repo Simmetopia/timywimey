@@ -15,10 +15,16 @@ defmodule TimyWimeyWeb.TimesheetLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  @impl true
+  def handle_event("recover", _payload, socket) do
+    WeeklyDigest.recover()
+    {:noreply, socket}
+  end
+
   def assign_week(%{assigns: %{user: user}} = socket) do
     socket
     |> assign_new(:weekly_digest, fn ->
-      week = Timex.now() |> Timex.week_of_month()
+      {_, week} = Timex.now() |> Timex.iso_week()
 
       case WeeklyDigest.get_week_by_week(week, user) do
         nil ->

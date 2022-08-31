@@ -41,7 +41,7 @@ defmodule TimyWimeyWeb.IndexLive do
   def assign_week(%{assigns: %{user: user}} = socket) do
     socket
     |> assign_new(:weekly_digest, fn ->
-      week = Timex.now() |> Timex.week_of_month()
+      {_, week} = Timex.now() |> Timex.iso_week()
 
       case WeeklyDigest.get_week_by_week(week, user) do
         nil ->

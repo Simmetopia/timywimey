@@ -180,30 +180,33 @@ defmodule TimyWimey.Timesheets do
       |> Timesheet.changeset(attrs)
       |> Repo.update()
 
+    to_u = if timesheet.is_spare_time, do: :spare_time_minutes, else: :worked_time_minutes
+
     case res do
       {:ok, timesheet_n} ->
+        new_t = if timesheet_n.is_spare_time, do: :spare_time_minutes, else: :worked_time_minutes
+
         minutes_worked =
           Timex.Duration.from_hours(timesheet_n.hours)
           |> Timex.Duration.add(Timex.Duration.from_minutes(timesheet_n.minutes))
-          |> Timex.Duration.sub(Timex.Duration.from_hours(timesheet.hours))
-          |> Timex.Duration.sub(Timex.Duration.from_minutes(timesheet.minutes))
           |> Timex.Duration.to_minutes(truncate: true)
 
-        case timesheet.is_spare_time do
-          false ->
-            from(t in Week,
-              where: t.id == ^timesheet.week_id,
-              update: [inc: [worked_time_minutes: ^minutes_worked]]
-            )
-            |> Repo.update_all([])
-
-          true ->
-            from(t in Week,
-              where: t.id == ^timesheet.week_id,
-              update: [inc: [spare_time_minutes: ^minutes_worked]]
-            )
-            |> Repo.update_all([])
-        end
+        Ecto.Multi.new()
+        |> Ecto.Multi.update_all(
+          :add,
+          from(t in Week,
+            where: t.id == ^timesheet_n.week_id
+          ),
+          inc: [{new_t, minutes_worked}]
+        )
+        |> Ecto.Multi.update_all(
+          :remove,
+          from(t in Week,
+            where: t.id == ^timesheet.week_id
+          ),
+          inc: [{to_u, minutes_worked * -1}]
+        )
+        |> Repo.transaction()
 
         {:ok, timesheet_n}
 

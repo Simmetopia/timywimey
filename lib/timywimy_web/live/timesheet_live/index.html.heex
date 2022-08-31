@@ -10,7 +10,8 @@
         action={@live_action}
         timesheet={@timesheet}
         return_to={Routes.timesheet_index_path(@socket, :index)}
-        week={@weekly_digest}r
+        week={@weekly_digest}
+        user={@user}
       />
     </.modal>
   <% end %>
@@ -60,4 +61,6 @@
     to: Routes.timesheet_index_path(@socket, :new),
     class: "button mt-3 self-end"
   ) %>
+
+  <button phx-click="recover">Recover timesheets</button>
 </div>

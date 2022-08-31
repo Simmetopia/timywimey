@@ -12,6 +12,7 @@ defmodule TimyWimey.WeeklyDigest.Week do
     field :week_nr, :integer
     field :worked_time_minutes, :integer, default: 0
     belongs_to :user, TimyWimey.Users.User
+    has_many :timesheets, TimyWimey.Timesheets.Timesheet
 
     timestamps()
   end

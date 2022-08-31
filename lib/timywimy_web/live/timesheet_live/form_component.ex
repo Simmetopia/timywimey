@@ -2,15 +2,20 @@ defmodule TimyWimeyWeb.TimesheetLive.FormComponent do
   use TimyWimeyWeb, :live_component
 
   alias TimyWimey.Timesheets
+  alias TimyWimey.WeeklyDigest
 
   @impl true
   def update(%{timesheet: timesheet} = assigns, socket) do
     changeset = Timesheets.change_timesheet(timesheet)
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign(:changeset, changeset)}
+    {:ok, socket |> assign(assigns) |> assign(:changeset, changeset) |> assign_weeks}
+  end
+
+  def assign_weeks(socket) do
+    socket
+    |> assign_new(:weeks, fn ->
+      WeeklyDigest.list_weeks_by_user(socket.assigns.user)
+    end)
   end
 
   @impl true

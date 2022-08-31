@@ -28,6 +28,12 @@
         <%= checkbox(f, :is_spare_time, class: "input") %>
         <%= error_tag(f, :is_spare_time) %>
       </div>
+
+      <div class="flex items-center flex-row gap-3 lg:flex-col w-full">
+        <%= label(f, :week_id, "Week nr") %>
+        <%= select(f, :week_id, Enum.map(@weeks, &{&1.week_nr, &1.id}), class: "input") %>
+        <%= error_tag(f, :week_id) %>
+      </div>
     </div>
 
     <%= label(f, :note) %>

@@ -21,6 +21,55 @@ defmodule TimyWimey.WeeklyDigest do
     Repo.all(Week)
   end
 
+  def list_weeks_by_user(user) do
+    Repo.all(from(w in Week, where: w.user_id == ^user.id))
+  end
+
+  def recover do
+    weeks = Repo.all(Week) |> Repo.preload(:timesheets)
+
+    weeks
+    |> Enum.each(fn week ->
+      case week.timesheets do
+        [] ->
+          delete_week(week)
+
+        timesheets ->
+          total_minutes =
+            timesheets
+            |> Enum.reject(fn w -> w.is_spare_time end)
+            |> Enum.map(fn ts -> ts.minutes end)
+            |> Enum.sum()
+
+          total_hours =
+            timesheets
+            |> Enum.reject(fn w -> w.is_spare_time end)
+            |> Enum.map(fn ts -> ts.hours end)
+            |> Enum.sum()
+            |> Timex.Duration.from_hours()
+            |> Timex.Duration.to_minutes(truncate: true)
+            |> Kernel.+(total_minutes)
+
+          total_spare_minutes =
+            timesheets
+            |> Enum.filter(fn w -> w.is_spare_time end)
+            |> Enum.map(fn ts -> ts.minutes end)
+            |> Enum.sum()
+
+          total_spare =
+            timesheets
+            |> Enum.filter(fn w -> w.is_spare_time end)
+            |> Enum.map(fn ts -> ts.hours end)
+            |> Enum.sum()
+            |> Timex.Duration.from_hours()
+            |> Timex.Duration.to_minutes(truncate: true)
+            |> Kernel.+(total_spare_minutes)
+
+          update_week(week, %{worked_time_minutes: total_hours, spare_time_minuts: total_spare})
+      end
+    end)
+  end
+
   @doc """
   Gets a single week.
 
