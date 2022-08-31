@@ -18,14 +18,14 @@
       <%= "#{@date_today |> Date.beginning_of_week() |> Calendar.strftime("%B %-d, %Y")} - #{@date_today |> Date.end_of_week() |> Calendar.strftime("%B %-d, %Y")}" %>
     </span>
     <span>
-      You are working <%= @user.details.weekly_hours %> hours pr week
+      You are working <%= @weekly_digest.weekly_hours %> hours pr week
     </span>
     <span>
-      this week: <%= total_time(@timesheets) %>
+      this week: <%= worked_time(@weekly_digest) %>
     </span>
 
     <span>
-      missing: <%= missing_time(@user.details.weekly_hours, @timesheets) %>
+      missing: <%= missing_time(@weekly_digest) %>
     </span>
 
     <span>

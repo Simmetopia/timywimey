@@ -10,8 +10,7 @@ defmodule TimyWimeyWeb.IndexLive do
      socket
      |> assign(diff_weeks: 0, date_today: Date.utc_today())
      |> assign_week()
-     |> assign_overtime()
-     |> assign_timesheets()}
+     |> assign_overtime()}
   end
 
   @impl true
@@ -22,8 +21,21 @@ defmodule TimyWimeyWeb.IndexLive do
   def assign_overtime(%{assigns: %{user: user}} = socket) do
     socket
     |> assign_new(:overtime, fn ->
-      WeeklyDigest.calculate_overtime(user)
+      WeeklyDigest.calculate_overtime(user) |> minutes_to_clock()
     end)
+  end
+
+  def worked_time(week) do
+    minutes_to_clock(week.spare_time_minutes + week.worked_time_minutes)
+  end
+
+  def minutes_to_clock(minutes) do
+    {h, m, _, _} =
+      minutes
+      |> Timex.Duration.from_minutes()
+      |> Timex.Duration.to_clock()
+
+    "#{h}h:#{m}m"
   end
 
   def assign_week(%{assigns: %{user: user}} = socket) do
@@ -47,11 +59,6 @@ defmodule TimyWimeyWeb.IndexLive do
     end)
   end
 
-  def assign_timesheets(%{assigns: %{weekly_digest: weekly_digest}} = socket) do
-    socket
-    |> assign_new(:timesheets, fn -> Timesheets.time_sheets_week(weekly_digest) end)
-  end
-
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Timesheet")
@@ -70,38 +77,14 @@ defmodule TimyWimeyWeb.IndexLive do
     |> assign(:timesheet, nil)
   end
 
-  def total_time(timesheets) do
-    {hours, minutes} = reduce_timesheets(timesheets)
-
-    {h, m, _, _} =
-      Timex.Duration.from_hours(hours)
-      |> Timex.Duration.add(Timex.Duration.from_minutes(minutes))
-      |> Timex.Duration.to_clock()
-
-    "#{h}h:#{m}m"
-  end
-
-  defp reduce_timesheets([]) do
-    {0, 0}
-  end
-
-  defp reduce_timesheets(timesheets) do
-    Enum.reduce(timesheets, {0, 0}, fn timesheet, {hours, minutes} ->
-      {hours + timesheet.hours, minutes + timesheet.minutes}
-    end)
-  end
-
-  def missing_time(nil, _timesheets) do
+  def missing_time(nil) do
     "cannot calculate without total time"
   end
 
-  def missing_time(total_time, timesheets) do
-    {hours, minutes} = reduce_timesheets(timesheets)
-
+  def missing_time(week) do
     {h, m, _, _} =
-      Timex.Duration.from_hours(hours)
-      |> Timex.Duration.add(Timex.Duration.from_minutes(minutes))
-      |> Timex.Duration.sub(Timex.Duration.from_hours(total_time))
+      Timex.Duration.from_minutes(week.worked_time_minutes + week.spare_time_minutes)
+      |> Timex.Duration.sub(Timex.Duration.from_hours(week.weekly_hours))
       |> Timex.Duration.abs()
       |> Timex.Duration.to_clock()
 
