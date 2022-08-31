@@ -1,5 +1,5 @@
 <%= if @current_user do %>
-  <div class="w-screen place-items-center bottom-0 right-0 h-12 absolute grid grid-cols-5 border-t">
+  <div class="w-screen bg-slate-700 shadow text-white place-items-center bottom-0 right-0 h-12 fixed grid grid-cols-5 border-t">
     <%= live_redirect( to: Routes.index_path(@conn, :index)) do %>
       <TimyWimeyWeb.Icons.home />
     <% end %>
