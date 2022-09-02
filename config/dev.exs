@@ -26,8 +26,10 @@ config :timywimy, TimyWimeyWeb.Endpoint,
   secret_key_base: "tdG3bDtLHpH+PNV9Ia2pb6avbypxCiwv3Xo9fCxBfkDPK24c1R3gh/2AsaOaDDJE",
   watchers: [
     # Start the esbuild watcher by calling Esbuild.install_and_run(:default, args)
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
+    # esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
+    # tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
+
+    node: ["build.js", "--watch", cd: Path.expand("../assets", __DIR__)]
   ]
 
 # ## SSL Support
