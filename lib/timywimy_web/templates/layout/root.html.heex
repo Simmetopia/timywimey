@@ -15,16 +15,9 @@
     >
     </script>
   </head>
-  <body class="bg-gray-100 min-w-screen min-h-screen flex flex-col">
-    <header class="px-3 lg:px-16 bg-white py-8 shadow mb-2">
-      <section class="flex flex-col lg:justify-between lg:flex-row justify-center">
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img
-            src={Routes.static_path(@conn, "/images/phoenix.png")}
-            alt="Phoenix Framework Logo"
-          />
-        </a>
-      </section>
+  <body class="bg-gray-100">
+    <header class="px-3 lg:px-16 bg-slate-700 text-white py-8 shadow mb-2 grid place-items-center">
+      <a class="text-2xl font-bold font-mono" href="/">TimyWimey</a>
     </header>
     <%= @inner_content %>
     <%= render("_user_menu.html", assigns) %>
