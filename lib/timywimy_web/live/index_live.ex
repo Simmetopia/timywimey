@@ -18,6 +18,10 @@ defmodule TimyWimeyWeb.IndexLive do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
+  def handle_event("weeks", _params, socket) do
+    {:reply, %{weeks: [%{week_nr: 44}]}, socket}
+  end
+
   def assign_overtime(%{assigns: %{user: user}} = socket) do
     socket
     |> assign_new(:overtime, fn ->

@@ -46,6 +46,8 @@
       <%= @overtime %>
     </div>
   </div>
+  <.live_component module={TimyWimeyWeb.Svelte} id="creation" name="HelloWorld" props={%{week_nr: @weekly_digest.week_nr}} />
+
   <%= live_patch("New Timesheet",
     to: Routes.index_path(@socket, :new),
     class: "button mt-3 self-end"

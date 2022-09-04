@@ -1,0 +1,36 @@
+Arguments: 
+  /home/simmetopia/.asdf/installs/nodejs/16.10.0/bin/node /home/simmetopia/.node/corepack/yarn/1.22.11/bin/yarn.js add @types/phoenix-live-view
+
+PATH: 
+  /home/simmetopia/.asdf/plugins/nodejs/shims:/home/simmetopia/.asdf/installs/nodejs/16.10.0/.npm/bin:/home/simmetopia/.asdf/installs/nodejs/16.10.0/bin:/home/simmetopia/.config/Code/User/globalStorage/ms-vscode-remote.remote-containers/cli-bin:/home/simmetopia/.fly/bin/:/home/simmetopia/.dotnet/tools/:/home/simmetopia/.config/composer/vendor/bin/:/usr/local/sbin:/home/Simmetopia/.dotnet/tools/:/home/Simmetopia/.config/composer/vendor/bin/:/Users/dk8simbu/.fzf/bin:/home/simmetopia/.fzf/bin:/home/Simmetopia/.fzf/bin:/home/simmetopia/.asdf/shims:/home/simmetopia/.asdf/bin:/home/simmetopia/.vscode-server-insiders/bin/078f8e986d44de2c88f1f52bf63cecb2f8ec2560/bin/remote-cli:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Oculus/Support/oculus-runtime:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/dotnet/:/mnt/c/Program Files (x86)/bin:/mnt/c/Program Files/erl10.7/bin:/mnt/c/Program Files (x86)/Elixir/bin:/mnt/c/Users/simon/.mix/escripts:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/WINDOWS/system32:/mnt/c/WINDOWS:/mnt/c/WINDOWS/System32/Wbem:/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/:/mnt/c/WINDOWS/System32/OpenSSH/:/mnt/c/Users/simon/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/simon/AppData/Local/Programs/Microsoft VS Code Insiders/bin:/mnt/c/Users/simon/.dotnet/tools:/mnt/c/Users/simon/AppData/Local/JetBrains/Toolbox/scripts:/snap/bin
+
+Yarn version: 
+  1.22.11
+
+Node version: 
+  16.10.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@types%2fphoenix-live-view: Not found
+      at Request.params.callback [as _callback] (/home/simmetopia/.node/corepack/yarn/1.22.11/lib/cli.js:66992:18)
+      at Request.self.callback (/home/simmetopia/.node/corepack/yarn/1.22.11/lib/cli.js:140763:22)
+      at Request.emit (node:events:390:28)
+      at Request.<anonymous> (/home/simmetopia/.node/corepack/yarn/1.22.11/lib/cli.js:141735:10)
+      at Request.emit (node:events:390:28)
+      at IncomingMessage.<anonymous> (/home/simmetopia/.node/corepack/yarn/1.22.11/lib/cli.js:141657:12)
+      at Object.onceWrapper (node:events:509:28)
+      at IncomingMessage.emit (node:events:402:35)
+      at endReadableNT (node:internal/streams/readable:1343:12)
+      at processTicksAndRejections (node:internal/process/task_queues:83:21)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
