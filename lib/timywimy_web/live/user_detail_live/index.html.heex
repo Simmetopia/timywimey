@@ -8,3 +8,9 @@
   user_detail={@user_detail}
 />
 
+<.live_component
+  module={TimyWimeyWeb.Svelte}
+  id="user-details"
+  name="UserDetails"
+  props={%{user: %{user: @user, details: @user_detail}}}
+/>

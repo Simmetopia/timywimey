@@ -1,5 +1,5 @@
-import HelloWorld from "./components/HelloWorld.svelte";
+import UserDetails from "./components/UserDetails.svelte";
 
 export default {
-  HelloWorld,
+  UserDetails,
 };

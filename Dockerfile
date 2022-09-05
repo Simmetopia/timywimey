@@ -12,8 +12,8 @@
 #   - https://pkgs.org/ - resource for finding needed packages
 #   - Ex: hexpm/elixir:1.15.0-dev-erlang-25.0.3-debian-bullseye-20210902-slim
 #
-ARG ELIXIR_VERSION=1.14.0-rc.1
-ARG OTP_VERSION=25.0.1
+ARG ELIXIR_VERSION=1.14.0
+ARG OTP_VERSION=25.0.3
 ARG DEBIAN_VERSION=bullseye-20210902-slim
 
 ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
@@ -22,8 +22,11 @@ ARG RUNNER_IMAGE="debian:${DEBIAN_VERSION}"
 FROM ${BUILDER_IMAGE} as builder
 
 # install build dependencies
-RUN apt-get update -y && apt-get install -y build-essential git npm \
+RUN apt-get update -y && apt-get install -y build-essential git nodejs npm curl \
   && apt-get clean && rm -f /var/lib/apt/lists/*_*
+
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+  && apt-get install -y nodejs
 
 # prepare build dir
 WORKDIR /app
@@ -52,7 +55,11 @@ COPY lib lib
 
 COPY assets assets
 
-RUN npm i -g yarn; yarn install --prefix assets
+WORKDIR assets
+RUN node --version
+RUN npm i -g yarn; yarn set version stable
+RUN yarn install
+WORKDIR ../
 
 # compile assets
 RUN mix assets.deploy

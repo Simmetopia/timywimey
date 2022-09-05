@@ -1,28 +1,32 @@
 <%= if @current_user do %>
   <div class="w-screen bg-slate-700 shadow text-white place-items-center bottom-0 right-0 h-12 fixed grid grid-cols-5 border-t">
-    <%= live_redirect( to: Routes.index_path(@conn, :index)) do %>
+    <.link to={Routes.index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.home />
-    <% end %>
+    </.link>
 
-    <%= live_redirect(to: Routes.timesheet_index_path(@conn, :index)) do %>
+    <.link to={Routes.timesheet_index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.timeheets />
-    <% end %>
+    </.link>
 
-    <%= live_redirect(to: Routes.user_detail_index_path(@conn, :index)) do %>
+    <.link to={Routes.user_detail_index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.user />
-    <% end %>
+    </.link>
 
-    <%= live_redirect( to: Routes.user_settings_path(@conn, :edit)) do %>
+    <.link to={Routes.user_settings_path(@conn, :edit)}>
       <TimyWimeyWeb.Icons.settings />
-    <% end %>
+    </.link>
 
-    <%= link(to: Routes.user_session_path(@conn, :delete), method: :delete) do %>
+    <.link href={Routes.user_session_path(@conn, :delete)} method="delete">
       <TimyWimeyWeb.Icons.logout />
-    <% end %>
+    </.link>
   </div>
 <% else %>
   <div class="w-screen bottom-0 right-0 h-12 absolute grid grid-cols-2 place-items-center border-t">
-    <%= link("Register", to: Routes.user_registration_path(@conn, :new)) %>
-    <%= link("Log in", to: Routes.user_session_path(@conn, :new)) %>
+    <.link href={Routes.user_registration_path(@conn, :new)}>
+      Register
+    </.link>
+    <.link href={Routes.user_session_path(@conn, :new)}>
+      login
+    </.link>
   </div>
 <% end %>
