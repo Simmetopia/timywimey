@@ -15,7 +15,7 @@ defmodule TimyWimey.WeeklyDigestFixtures do
       |> Enum.into(%{
         weekly_hours: 42,
         spare_time_minutes: 0,
-        week_nr: Timex.now |> Timex.week_of_month,
+        week_nr: Timex.now() |> Timex.week_of_month(),
         worked_time_minutes: 0
       })
       |> TimyWimey.WeeklyDigest.create_week(user)
@@ -29,12 +29,11 @@ defmodule TimyWimey.WeeklyDigestFixtures do
       |> Enum.into(%{
         weekly_hours: user.details.weekly_hours,
         spare_time_minutes: 0,
-        week_nr: Timex.now |> Timex.week_of_month,
+        week_nr: Timex.now() |> Timex.week_of_month(),
         worked_time_minutes: 0
       })
       |> TimyWimey.WeeklyDigest.create_week(user)
 
     week
-
   end
 end

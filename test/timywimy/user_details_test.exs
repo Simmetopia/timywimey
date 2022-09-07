@@ -55,7 +55,6 @@ defmodule TimyWimey.UserDetailsTest do
       week = TimyWimey.WeeklyDigest.get_week!(week.id)
 
       assert user_detail.weekly_hours == week.weekly_hours
-
     end
   end
 end

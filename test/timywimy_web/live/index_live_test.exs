@@ -9,7 +9,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     user = TimyWimey.UsersFixtures.user_fixture()
     TimyWimey.UserDetails.update_user_detail(user.details, %{weekly_hours: 32})
     conn = log_in_user(conn, user)
-    week =  WeeklyDigestFixtures.week_fixture_user(user, %{weekly_hours: 32})
+    week = WeeklyDigestFixtures.week_fixture_user(user, %{weekly_hours: 32})
     TimesheetsFixtures.timesheet_fixture_week(week, %{minutes: 30})
 
     %{conn: conn, user: user}
@@ -61,7 +61,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
     end
   end
 
-  describe "Index no week" do 
+  describe "Index no week" do
     setup [:auth_socket_no_week]
 
     test "can add new timesheet", %{conn: conn} do
