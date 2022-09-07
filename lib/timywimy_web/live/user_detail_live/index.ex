@@ -12,6 +12,16 @@ defmodule TimyWimeyWeb.UserDetailLive.Index do
 
   @impl true
   def handle_event("fe_save", %{"wk" => week_nr, "nName" => name}, socket) do
-    {:reply, %{result: "pretty good"}, socket}
+    new_deets =
+      socket.assigns.user_detail |> update_in([Access.key!(:weekly_hours)], fn _ -> week_nr end)
+
+    {:reply, %{result: "pretty good"}, socket |> assign(user_detail: new_deets)}
+  end
+
+  @impl true
+  def handle_event("get_user", %{"user_id" => user_id}, socket) do
+    user = TimyWimey.Users.get_user!(user_id)
+
+    {:reply, user, socket}
   end
 end

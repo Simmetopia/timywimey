@@ -1,18 +1,18 @@
 <%= if @current_user do %>
   <div class="w-screen bg-slate-700 shadow text-white place-items-center bottom-0 right-0 h-12 fixed grid grid-cols-5 border-t">
-    <.link to={Routes.index_path(@conn, :index)}>
+    <.link navigate={Routes.index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.home />
     </.link>
 
-    <.link to={Routes.timesheet_index_path(@conn, :index)}>
+    <.link navigate={Routes.timesheet_index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.timeheets />
     </.link>
 
-    <.link to={Routes.user_detail_index_path(@conn, :index)}>
+    <.link navigate={Routes.user_detail_index_path(@conn, :index)}>
       <TimyWimeyWeb.Icons.user />
     </.link>
 
-    <.link to={Routes.user_settings_path(@conn, :edit)}>
+    <.link navigate={Routes.user_settings_path(@conn, :edit)}>
       <TimyWimeyWeb.Icons.settings />
     </.link>
 

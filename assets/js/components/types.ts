@@ -12,6 +12,7 @@ export interface User {
     id: number;
     inserted_at: Date;
     updated_at: Date;
+    details: Details
 }
 
 export interface UserDetailsProps {

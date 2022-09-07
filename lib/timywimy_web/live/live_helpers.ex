@@ -1,5 +1,4 @@
 defmodule TimyWimeyWeb.LiveHelpers do
-  import Phoenix.LiveView
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
@@ -112,7 +111,7 @@ defmodule TimyWimeyWeb.LiveHelpers do
     """
   end
 
-  attr :name, :string
+  attr :name, :atom
   attr :outlined, :boolean
   attr :rest, :global, default: %{class: "w-4 h-4 inline-block"}
 

@@ -16,7 +16,6 @@ defmodule TimyWimey.Timesheets.Timesheet do
   def changeset(timesheet, attrs) do
     timesheet
     |> cast(attrs, [:hours, :minutes, :note, :is_spare_time, :week_id])
-    |> validate_required([:note])
     |> validate_number(:hours, greater_than: 0, less_than: 24)
     |> validate_number(:minutes, greater_than: 0, less_than: 60)
   end
