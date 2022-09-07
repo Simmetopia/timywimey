@@ -13,39 +13,16 @@
   </.modal>
 <% end %>
 <div class="flex flex-col gap-3">
-  <div class="rounded bg-white p-3 shadow flex flex-col gap-6">
-    <span class="text-white bg-slate-700 text-sm -mx-3 -mt-3 p-3 font-bold rounded-t-lg grid place-items-center">
-      <%= "#{@date_today |> Date.beginning_of_week() |> Calendar.strftime("%B %-d, %Y")} - #{@date_today |> Date.end_of_week() |> Calendar.strftime("%B %-d, %Y")}" %>
-    </span>
-    <div class="flex flex-row justify-around">
-      <span>
-        <b>Week:</b> <%= @weekly_digest.week_nr %>
-      </span>
-      <span>
-        <b>Weekly hours:</b> <%= @weekly_digest.weekly_hours %>
-      </span>
-    </div>
-    <div class="flex flex-row justify-around">
-      <div class="flex flex-row gap-3">
-        <span class="text-green-600">
-          <TimyWimeyWeb.Icons.up_icon />
+  <TimyWimeyWeb.Components.TimeCard.card date_today={@date_today} weekly_digest={@weekly_digest}>
+    <:overtime>
+      <div class="flex flex-row gap-3 self-center">
+        <span class="text-stone-700">
+          <TimyWimeyWeb.Icons.user_clock />
         </span>
-        <%= worked_time(@weekly_digest) %>
+        <%= @overtime %>
       </div>
-      <div class="flex flex-row gap-3 items-center">
-        <span class="rotate-180 text-rose-500">
-          <TimyWimeyWeb.Icons.up_icon />
-        </span>
-        <%= missing_time(@weekly_digest) %>
-      </div>
-    </div>
-    <div class="flex flex-row gap-3 self-center">
-      <span class="text-stone-700">
-        <TimyWimeyWeb.Icons.user_clock />
-      </span>
-      <%= @overtime %>
-    </div>
-  </div>
+    </:overtime>
+  </TimyWimeyWeb.Components.TimeCard.card>
 
   <%= live_patch("New Timesheet",
     to: Routes.index_path(@socket, :new),

@@ -99,16 +99,25 @@ defmodule TimyWimey.WeeklyDigest do
       %Week{
         weekly_hours: weekly_hours,
         spare_time_minutes: spare_time_minutes,
-        worked_time_minutes: worked_time_minutes
+        worked_time_minutes: worked_time_minutes,
+        week_nr: week_nr
       } = week
 
       weekly_minutes = weekly_hours * 60
+      {_year, curr_week_nr} = Timex.now() |> Timex.iso_week()
 
-      d_ot = spare_time_minutes + worked_time_minutes - weekly_minutes
-      final_ot = ot + (d_ot - spare_time_minutes)
+      case {weekly_minutes - (spare_time_minutes + worked_time_minutes), curr_week_nr - week_nr} do
+        {a, b} when a >= 0 and b == 0 ->
+          ot
 
-      final_ot
+        _ ->
+          d_ot = spare_time_minutes + worked_time_minutes - weekly_minutes
+          final_ot = ot + (d_ot - spare_time_minutes)
+
+          final_ot
+      end
     end)
+    |> dbg
   end
 
   @doc """

@@ -81,18 +81,4 @@ defmodule TimyWimeyWeb.IndexLive do
     |> assign(:page_title, "Listing Timesheets")
     |> assign(:timesheet, nil)
   end
-
-  def missing_time(nil) do
-    "cannot calculate without total time"
-  end
-
-  def missing_time(week) do
-    {h, m, _, _} =
-      Timex.Duration.from_minutes(week.worked_time_minutes + week.spare_time_minutes)
-      |> Timex.Duration.sub(Timex.Duration.from_hours(week.weekly_hours))
-      |> Timex.Duration.abs()
-      |> Timex.Duration.to_clock()
-
-    "#{h}h:#{m}m"
-  end
 end
