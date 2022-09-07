@@ -117,7 +117,6 @@ defmodule TimyWimey.WeeklyDigest do
           final_ot
       end
     end)
-    |> dbg
   end
 
   @doc """

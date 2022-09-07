@@ -18,8 +18,8 @@ defmodule TimyWimeyWeb.IndexLive do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  def handle_event("weeks", params, socket) do
-    dbg(params)
+  @impl true
+  def handle_event("weeks", _params, socket) do
     {:reply, %{weeks: [%{week_nr: 44}]}, socket}
   end
 
