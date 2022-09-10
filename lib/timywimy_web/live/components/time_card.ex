@@ -29,8 +29,8 @@ defmodule TimyWimeyWeb.Components.TimeCard do
             <%= worked_time(@weekly_digest) %>
           </div>
           <div class="flex flex-row gap-3 items-center">
-            <span class="rotate-180 text-rose-500">
-              <TimyWimeyWeb.Icons.up_icon />
+            <span class="text-rose-500">
+              <TimyWimeyWeb.Icons.down_icon />
             </span>
             <%= missing_time(@weekly_digest) %>
           </div>

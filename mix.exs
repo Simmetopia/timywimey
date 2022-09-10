@@ -61,7 +61,7 @@ defmodule TimyWimey.MixProject do
       {:jason, "~> 1.2"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
-      {:heroicons, "~> 0.2.2"},
+      {:heroicons, "~> 0.4.1"},
       {:plug_cowboy, "~> 2.5"}
     ]
   end

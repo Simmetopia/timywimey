@@ -113,7 +113,7 @@ defmodule TimyWimeyWeb.LiveHelpers do
 
   attr :name, :atom
   attr :outlined, :boolean
-  attr :rest, :global, default: %{class: "w-4 h-4 inline-block"}
+  attr :rest, :global, default: %{class: "w-6 h-6 inline-block"}
 
   def icon(assigns) do
     assigns = assign_new(assigns, :"aria-hidden", fn -> !Map.has_key?(assigns, :"aria-label") end)
