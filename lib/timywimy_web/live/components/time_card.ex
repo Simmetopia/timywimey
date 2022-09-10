@@ -7,6 +7,8 @@ defmodule TimyWimeyWeb.Components.TimeCard do
   attr :overtime, :list, default: []
 
   def card(assigns) do
+    {h, m} = missing_time(assigns.weekly_digest)
+
     ~H"""
     <div>
       <div class="rounded bg-white p-3 shadow flex flex-col gap-6">
@@ -30,9 +32,13 @@ defmodule TimyWimeyWeb.Components.TimeCard do
           </div>
           <div class="flex flex-row gap-3 items-center">
             <span class="text-rose-500">
-              <TimyWimeyWeb.Icons.down_icon />
+              <%= if h>0 or m>0 do %>
+                <.icon name={:chevron_double_up} class="h-6 w-6 text-green-500" />
+              <% else %>
+                <.icon name={:chevron_double_down} class="h-6 w-6 text-rose-500" />
+              <% end %>
             </span>
-            <%= missing_time(@weekly_digest) %>
+            <%= "#{abs(h)}h:#{abs(m)}m" %>
           </div>
         </div>
         <%= render_slot(@overtime) %>
@@ -42,18 +48,13 @@ defmodule TimyWimeyWeb.Components.TimeCard do
     """
   end
 
-  defp missing_time(nil) do
-    "cannot calculate without total time"
-  end
-
   defp missing_time(week) do
     {h, m, _, _} =
       Timex.Duration.from_minutes(week.worked_time_minutes + week.spare_time_minutes)
       |> Timex.Duration.sub(Timex.Duration.from_hours(week.weekly_hours))
-      |> Timex.Duration.abs()
       |> Timex.Duration.to_clock()
 
-    "#{h}h:#{m}m"
+    {h, m}
   end
 
   defp worked_time(week) do
