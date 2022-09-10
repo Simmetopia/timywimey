@@ -10,8 +10,6 @@ defmodule TimyWimey.TimesheetsTest do
 
     import TimyWimey.TimesheetsFixtures
 
-    @invalid_attrs %{note: nil, minutes: nil}
-
     test "list_timesheets/0 returns all timesheets" do
       timesheet = timesheet_fixture()
       [sheet] = timesheets = Timesheets.list_timesheets(timesheet.week.user)
@@ -34,11 +32,6 @@ defmodule TimyWimey.TimesheetsTest do
       assert timesheet.minutes == 42
     end
 
-    test "create_timesheet/1 with invalid data returns error changeset" do
-      week = WeeklyDigestFixtures.week_fixture()
-      assert {:error, %Ecto.Changeset{}} = Timesheets.create_timesheet(@invalid_attrs, week)
-    end
-
     test "update_timesheet/2 with valid data updates the timesheet" do
       timesheet = timesheet_fixture()
       update_attrs = %{note: "some updated note", minutes: 43}
@@ -48,12 +41,6 @@ defmodule TimyWimey.TimesheetsTest do
 
       assert timesheet.note == "some updated note"
       assert timesheet.minutes == 43
-    end
-
-    test "update_timesheet/2 with invalid data returns error changeset" do
-      timesheet = timesheet_fixture()
-      {:error, %Ecto.Changeset{}} = Timesheets.update_timesheet(timesheet, @invalid_attrs)
-      assert timesheet.id == Timesheets.get_timesheet!(timesheet.id).id
     end
 
     test "delete_timesheet/1 deletes the timesheet" do

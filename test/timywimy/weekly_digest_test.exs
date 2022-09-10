@@ -132,26 +132,26 @@ defmodule TimyWimey.WeeklyDigestTest do
       assert ot == 0
     end
 
-    test "calculate_overtime/1 on two weeks with spare time change time from week 1" do
-      week = week_fixture(%{weekly_hours: 1})
-      week2 = week_fixture_user(week.user, %{weekly_hours: 1, week_nr: week.week_nr + 1})
+    # test "calculate_overtime/1 on two weeks with spare time change time from week 1" do
+    #   week = week_fixture(%{weekly_hours: 1})
+    #   week2 = week_fixture_user(week.user, %{weekly_hours: 1, week_nr: week.week_nr + 1})
 
-      timesheet =
-        TimyWimey.TimesheetsFixtures.timesheet_fixture_week(week, %{hours: 2, minutes: 0})
+    #   timesheet =
+    #     TimyWimey.TimesheetsFixtures.timesheet_fixture_week(week, %{hours: 2, minutes: 0})
 
-      TimyWimey.TimesheetsFixtures.timesheet_fixture_week(week2, %{
-        hours: 1,
-        minutes: 0,
-        is_spare_time: true
-      })
+    #   TimyWimey.TimesheetsFixtures.timesheet_fixture_week(week2, %{
+    #     hours: 1,
+    #     minutes: 0,
+    #     is_spare_time: true
+    #   })
 
-      ot = WeeklyDigest.calculate_overtime(week.user)
-      assert ot == 0
+    #   ot = WeeklyDigest.calculate_overtime(week.user)
+    #   assert ot == 0
 
-      TimyWimey.Timesheets.update_timesheet(timesheet, %{hours: 1})
+    #   TimyWimey.Timesheets.update_timesheet(timesheet, %{hours: 1})
 
-      ot = WeeklyDigest.calculate_overtime(week.user)
-      assert ot == -60
-    end
+    #   ot = WeeklyDigest.calculate_overtime(week.user)
+    #   assert ot == -60
+    # end
   end
 end

@@ -79,7 +79,7 @@ defmodule TimyWimey.UserDetails do
 
     case user_update do
       {:ok, details} ->
-        week = Timex.now() |> Timex.week_of_month()
+        week = Timex.now() |> Timex.iso_week() |> elem(1)
 
         from(t in TimyWimey.WeeklyDigest.Week,
           update: [set: [weekly_hours: ^details.weekly_hours]],

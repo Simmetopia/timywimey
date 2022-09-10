@@ -33,7 +33,7 @@ defmodule TimyWimeyWeb.IndexLiveTest do
 
     test "shows missing work", %{conn: conn} do
       {:ok, _index_live, html} = live(conn, Routes.index_path(conn, :index))
-      assert html =~ "missing: 31h:30m"
+      assert html =~ "31h:30m"
     end
 
     test "can add new timesheet", %{conn: conn} do

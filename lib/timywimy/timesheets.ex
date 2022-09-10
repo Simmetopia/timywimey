@@ -19,7 +19,12 @@ defmodule TimyWimey.Timesheets do
 
   """
   def list_timesheets(user) do
-    timesheet_by_user_query(user)
+    uq = timesheet_by_user_query(user)
+
+    from([timesheet: timesheet, week: w] in uq,
+      order_by: [desc: w.week_nr],
+      preload: [:week]
+    )
     |> Repo.all()
   end
 
@@ -27,9 +32,8 @@ defmodule TimyWimey.Timesheets do
     from(p in Timesheet,
       as: :timesheet,
       join: w in assoc(p, :week),
+      as: :week,
       join: u in assoc(w, :user),
-      order_by: [desc: w.week_nr],
-      preload: :week,
       where: u.id == ^user.id
     )
   end

@@ -31,7 +31,13 @@
 
       <div class="flex items-center flex-row gap-3 lg:flex-col w-full">
         <%= label(f, :week_id, "Week nr") %>
-        <%= select(f, :week_id, Enum.map(@weeks, &{&1.week_nr, &1.id}) |> Enum.sort_by(fn {week_nr, _id} -> week_nr end, :desc), class: "input") %>
+        <%= select(
+          f,
+          :week_id,
+          Enum.map(@weeks, &{&1.week_nr, &1.id})
+          |> Enum.sort_by(fn {week_nr, _id} -> week_nr end, :desc),
+          class: "input"
+        ) %>
         <%= error_tag(f, :week_id) %>
       </div>
     </div>

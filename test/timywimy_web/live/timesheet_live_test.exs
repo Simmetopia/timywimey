@@ -36,10 +36,6 @@ defmodule TimyWimeyWeb.TimesheetLiveTest do
 
       assert_patch(index_live, Routes.timesheet_index_path(conn, :new))
 
-      assert index_live
-             |> form("#timesheet-form", timesheet: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
       {:ok, _, html} =
         index_live
         |> form("#timesheet-form", timesheet: @create_attrs)
@@ -57,10 +53,6 @@ defmodule TimyWimeyWeb.TimesheetLiveTest do
                "Edit Timesheet"
 
       assert_patch(index_live, Routes.timesheet_index_path(conn, :edit, timesheet))
-
-      assert index_live
-             |> form("#timesheet-form", timesheet: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         index_live
@@ -97,10 +89,6 @@ defmodule TimyWimeyWeb.TimesheetLiveTest do
                "Edit Timesheet"
 
       assert_patch(show_live, Routes.timesheet_show_path(conn, :edit, timesheet))
-
-      assert show_live
-             |> form("#timesheet-form", timesheet: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
 
       {:ok, _, html} =
         show_live
