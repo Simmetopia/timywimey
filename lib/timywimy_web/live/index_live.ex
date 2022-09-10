@@ -8,8 +8,10 @@ defmodule TimyWimeyWeb.IndexLive do
   def mount(_params, _session, socket) do
     {:ok,
      socket
-     |> assign(diff_weeks: 0, date_today: Date.utc_today())
-     |> assign_week()
+     |> assign_week(:weekly_digest)
+     |> assign_week(:prev_weekly_digest, 1)
+     |> assign(date_today: Date.utc_today())
+     |> assign(date_last: Date.utc_today() |> Date.add(-(7 * 1)))
      |> assign_overtime()}
   end
 
@@ -43,12 +45,13 @@ defmodule TimyWimeyWeb.IndexLive do
     "#{h}h:#{m}m"
   end
 
-  def assign_week(%{assigns: %{user: user}} = socket) do
+  def assign_week(%{assigns: %{user: user}} = socket, key, rel_week \\ 0) do
+    # This will create issues for whole new nusers
     socket
-    |> assign_new(:weekly_digest, fn ->
+    |> assign_new(key, fn ->
       {_, week} = Timex.now() |> Timex.iso_week()
 
-      case WeeklyDigest.get_week_by_week(week, user) do
+      case WeeklyDigest.get_week_by_week(week - rel_week, user) do
         nil ->
           {:ok, week} =
             WeeklyDigest.create_week(

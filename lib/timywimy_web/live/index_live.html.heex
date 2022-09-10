@@ -13,6 +13,11 @@
   </.modal>
 <% end %>
 <div class="flex flex-col gap-3">
+<!-- Last week -->
+  <TimyWimeyWeb.Components.TimeCard.card date_today={@date_last} weekly_digest={@prev_weekly_digest} >
+  </TimyWimeyWeb.Components.TimeCard.card>
+
+<!-- Current week -->
   <TimyWimeyWeb.Components.TimeCard.card date_today={@date_today} weekly_digest={@weekly_digest}>
     <:overtime>
       <div class="flex flex-row gap-3 self-center">
@@ -23,6 +28,7 @@
       </div>
     </:overtime>
   </TimyWimeyWeb.Components.TimeCard.card>
+
 
   <%= live_patch("New Timesheet",
     to: Routes.index_path(@socket, :new),
