@@ -28,6 +28,8 @@ defmodule TimyWimey.Timesheets do
       as: :timesheet,
       join: w in assoc(p, :week),
       join: u in assoc(w, :user),
+      order_by: [desc: w.week_nr],
+      preload: :week,
       where: u.id == ^user.id
     )
   end
