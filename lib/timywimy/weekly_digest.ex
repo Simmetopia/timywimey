@@ -87,7 +87,7 @@ defmodule TimyWimey.WeeklyDigest do
   def get_week!(id), do: Repo.get!(Week, id)
 
   def get_week_by_week(week, user) do
-    Repo.get_by(Week, week_nr: week, user_id: user.id)
+    Repo.all(Week, week_nr: week, user_id: user.id, limit: 1) |> Enum.at(0)
   end
 
   def calculate_overtime(%TimyWimey.Users.User{} = user) do
