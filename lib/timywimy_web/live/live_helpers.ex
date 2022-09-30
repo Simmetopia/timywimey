@@ -112,7 +112,7 @@ defmodule TimyWimeyWeb.LiveHelpers do
   end
 
   attr :name, :atom
-  attr :outlined, :boolean
+  attr :outlined, :boolean, default: false
   attr :rest, :global, default: %{class: "w-6 h-6 inline-block"}
 
   def icon(assigns) do
