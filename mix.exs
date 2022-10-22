@@ -62,7 +62,10 @@ defmodule TimyWimey.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:heroicons, "~> 0.4.1"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:kino, github: "livebook-dev/kino", override: true},
+      {:vega_lite, "~> 0.1.4"},
+      {:kino_vega_lite, "~> 0.1.1"},
     ]
   end
 
