@@ -44,7 +44,8 @@ defmodule TimyWimey.MixProject do
   defp deps do
     [
       {:bcrypt_elixir, "~> 3.0"},
-      {:phoenix, github: "phoenixframework/phoenix", override: true},
+      {:phoenix, "~> 1.6.0"},
+      {:phoenix_live_view, "~> 0.18.0"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
@@ -52,7 +53,6 @@ defmodule TimyWimey.MixProject do
       {:phoenix_html, "~> 3.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_view, github: "phoenixframework/phoenix_live_view", override: true},
       {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
@@ -62,10 +62,7 @@ defmodule TimyWimey.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:heroicons, "~> 0.4.1"},
-      {:plug_cowboy, "~> 2.5"},
-      {:kino, github: "livebook-dev/kino", override: true},
-      {:vega_lite, "~> 0.1.4"},
-      {:kino_vega_lite, "~> 0.1.1"},
+      {:plug_cowboy, "~> 2.5"}
     ]
   end
 
