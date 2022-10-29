@@ -50,9 +50,10 @@ defmodule TimyWimeyWeb.IndexLive do
     socket
     |> assign_new(key, fn ->
       {_, week} = Timex.now() |> Timex.iso_week()
+      case {rel_week, WeeklyDigest.get_week_by_week(week - rel_week, user)} do
+        {num, _} when num != 0 -> nil
 
-      case WeeklyDigest.get_week_by_week(week - rel_week, user) do
-        nil ->
+        {_, nil} ->
           {:ok, week} =
             WeeklyDigest.create_week(
               %{week_nr: week, weekly_hours: user.details.weekly_hours},
@@ -61,7 +62,7 @@ defmodule TimyWimeyWeb.IndexLive do
 
           week
 
-        week ->
+        {_, week} ->
           week
       end
     end)
